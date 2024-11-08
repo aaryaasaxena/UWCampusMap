@@ -119,7 +119,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         graph.insertEdge("F", "H", 4.0);
         graph.insertEdge("G", "H", 4.0);
 
-        assertEquals(Arrays.asList("A", "B", "D", "E"), graph.shortestPathData("A", "E"));
+        assertEquals(Arrays.asList("A", "B", "D", "E"), graph.shortestPathData("A", "E")); //test paths from lecture
         assertEquals(Arrays.asList("A", "B", "D", "F"), graph.shortestPathData("A", "F"));
         
     }
