@@ -1,15 +1,16 @@
 // === CS400 File Header Information ===
-// Name: <your full name>
-// Email: <your @wisc.edu email address>
+// Name: Aarya Saxena
+// Email: asaxena26@wisc.edu
 // Group and Team: <your group name: two letters, and team color>
 // Group TA: <name of your group's ta>
-// Lecturer: <name of your lecturer>
+// Lecturer: Florian
 // Notes to Grader: <optional extra notes>
 
-import java.util.PriorityQueue;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
 
 /**
  * This class extends the BaseGraph data structure with additional methods for
@@ -53,6 +54,142 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         }
     }
 
+
+    @Test
+    public void testShortestPath(){
+        DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+
+        graph.insertNode("A");
+        graph.insertNode("B");
+        graph.insertNode("C");
+        graph.insertNode("D");
+        graph.insertNode("E");
+        graph.insertNode("F");
+        graph.insertNode("G");
+        graph.insertNode("H");
+
+        graph.insertEdge("A", "C", 2.0);
+        graph.insertEdge("A", "B", 4.0);
+        graph.insertEdge("A", "E", 15.0);
+        graph.insertEdge("B", "E", 10.0);
+        graph.insertEdge("B", "D", 1.0);
+        graph.insertEdge("C", "D", 5.0);
+        graph.insertEdge("D", "E", 3.0);
+        graph.insertEdge("D", "F", 0.0);
+        graph.insertEdge("F", "D", 2.0);
+        graph.insertEdge("F", "H", 4.0);
+        graph.insertEdge("G", "H", 4.0);
+
+
+        DijkstraGraph<String, Double>.SearchNode result = graph.computeShortestPath("A", "E");
+
+        assertEquals("E", result.node.data, "End node should be E.");
+
+        List<String> expectedPath = List.of("A", "B", "D", "E");
+        List<String> actualPath = new LinkedList<>();
+        while (result != null) {
+            actualPath.add(0, result.node.data);  // Build path from start to end
+            result = result.predecessor;
+        }
+        assertEquals(expectedPath, actualPath);
+    }
+
+    @Test
+    public void testShortestPathData(){
+        DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+
+        graph.insertNode("A");
+        graph.insertNode("B");
+        graph.insertNode("C");
+        graph.insertNode("D");
+        graph.insertNode("E");
+        graph.insertNode("F");
+        graph.insertNode("G");
+        graph.insertNode("H");
+
+        graph.insertEdge("A", "C", 2.0);
+        graph.insertEdge("A", "B", 4.0);
+        graph.insertEdge("A", "E", 15.0);
+        graph.insertEdge("B", "E", 10.0);
+        graph.insertEdge("B", "D", 1.0);
+        graph.insertEdge("C", "D", 5.0);
+        graph.insertEdge("D", "E", 3.0);
+        graph.insertEdge("D", "F", 0.0);
+        graph.insertEdge("F", "D", 2.0);
+        graph.insertEdge("F", "H", 4.0);
+        graph.insertEdge("G", "H", 4.0);
+
+        assertEquals(Arrays.asList("A", "B", "D", "E"), graph.shortestPathData("A", "E"));
+        assertEquals(Arrays.asList("A", "B", "D", "F"), graph.shortestPathData("A", "F"));
+        
+    }
+
+    @Test
+    public void testShortestPathCost(){
+        DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+
+        graph.insertNode("A");
+        graph.insertNode("B");
+        graph.insertNode("C");
+        graph.insertNode("D");
+        graph.insertNode("E");
+        graph.insertNode("F");
+        graph.insertNode("G");
+        graph.insertNode("H");
+
+        graph.insertEdge("A", "C", 2.0);
+        graph.insertEdge("A", "B", 4.0);
+        graph.insertEdge("A", "E", 15.0);
+        graph.insertEdge("B", "E", 10.0);
+        graph.insertEdge("B", "D", 1.0);
+        graph.insertEdge("C", "D", 5.0);
+        graph.insertEdge("D", "E", 3.0);
+        graph.insertEdge("D", "F", 0.0);
+        graph.insertEdge("F", "D", 2.0);
+        graph.insertEdge("F", "H", 4.0);
+        graph.insertEdge("G", "H", 4.0);
+
+        assertEquals(8.0, graph.shortestPathCost("A", "E"));
+        assertEquals(5.0, graph.shortestPathCost("A", "F"));
+
+    }
+
+    @Test
+    public void testNoPath(){
+        DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+
+        graph.insertNode("A");
+        graph.insertNode("B");
+        graph.insertNode("C");
+        graph.insertNode("D");
+        graph.insertNode("E");
+        graph.insertNode("F");
+        graph.insertNode("G");
+        graph.insertNode("H");
+
+        graph.insertEdge("A", "C", 2.0);
+        graph.insertEdge("A", "B", 4.0);
+        graph.insertEdge("A", "E", 15.0);
+        graph.insertEdge("B", "E", 10.0);
+        graph.insertEdge("B", "D", 1.0);
+        graph.insertEdge("C", "D", 5.0);
+        graph.insertEdge("D", "E", 3.0);
+        graph.insertEdge("D", "F", 0.0);
+        graph.insertEdge("F", "D", 2.0);
+        graph.insertEdge("F", "H", 4.0);
+        graph.insertEdge("G", "H", 4.0);
+
+        assertThrows(NoSuchElementException.class, () -> graph.shortestPathData("A", "G"), "no " +
+            "path found!");
+        assertThrows(NoSuchElementException.class, () -> graph.shortestPathCost("A", "G"), "no " +
+            "path found!");
+        assertThrows(NoSuchElementException.class, () -> graph.shortestPathData("C", "G"), "no " +
+            "path found!");
+        assertThrows(NoSuchElementException.class, () -> graph.shortestPathCost("C", "G"), "no " +
+            "path found!");
+
+    }
+
     /**
      * Constructor that sets the map that the graph uses.
      */
@@ -63,7 +200,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
     /**
      * This helper method creates a network of SearchNodes while computing the
      * shortest path between the provided start and end locations. The
-     * SearchNode that is returned by this method is represents the end of the
+     * SearchNode that is returned by this method it represents the end of the
      * shortest path that is found: it's cost is the cost of that shortest path,
      * and the nodes linked together through predecessor references represent
      * all of the nodes along that shortest path (ordered from end to start).
@@ -85,7 +222,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * from the node with the provided start value through the node with the
      * provided end value. This list of data values starts with the start
      * value, ends with the end value, and contains intermediary values in the
-     * order they are encountered while traversing this shorteset path. This
+     * order they are encountered while traversing this shortest path. This
      * method uses Dijkstra's shortest path algorithm to find this solution.
      *
      * @param start the data item in the starting node for the path
