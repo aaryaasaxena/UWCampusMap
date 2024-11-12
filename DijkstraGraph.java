@@ -78,32 +78,46 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      */
     protected SearchNode computeShortestPath(NodeType start, NodeType end) {
         if (!containsNode(start) || !containsNode(end)){
-            throw new NoSuchElementException("start or end node not in graph!");
+            throw new NoSuchElementException("start or end node not in graph!"); //exception
+            // checker, check if nodes exist in path
         }
 
         PlaceholderMap<NodeType, SearchNode> shortestPaths = new PlaceholderMap<>();
-        PriorityQueue<SearchNode> pq = new PriorityQueue<>();
+        PriorityQueue<SearchNode> pq = new PriorityQueue<>(); //instantiate a priority queue
 
-        SearchNode startNode = new SearchNode(nodes.get(start), 0, null);
-        shortestPaths.put(start, startNode);
-        pq.add(startNode);
-        while (!pq.isEmpty()){
-            SearchNode currentNode = pq.poll();
-            if (currentNode.node.data.equals(end)) {
+        SearchNode startNode = new SearchNode(nodes.get(start), 0, null); // make a SearchNode
+        // object out of start
+        shortestPaths.put(start, startNode); // add the start to the map
+        pq.add(startNode); // add the starting node to the pq
+        while (!pq.isEmpty()) { // loop while pq has nodes
+            SearchNode currentNode = pq.poll(); // first node
+            if (currentNode.node.data.equals(end)) { // if start equals end, terminate
                 return currentNode;
             }
-            for (BaseGraph<NodeType, EdgeType>.Edge edge : currentNode.node.edgesLeaving){
+            
+            //loop through all edges leaving the current node
+            for (BaseGraph<NodeType, EdgeType>.Edge edge : currentNode.node.edgesLeaving) {
+
+                //get the successor node connected by the current edge
                 NodeType successors = edge.successor.data;
+
+                //calculate the total cost to reach the successor via this edge
                 double cost = currentNode.cost + edge.data.doubleValue();
 
-                if (!shortestPaths.containsKey(successors) ||
-                    cost < shortestPaths.get(successors).cost){
+                if (!shortestPaths.containsKey(successors) || cost < shortestPaths.get(successors).cost) {
+                    //check if this path to the successor is shorter than any previously found path
+
                     if (shortestPaths.containsKey(successors)) {
-                        shortestPaths.remove(successors);
+                        shortestPaths.remove(successors); //if a shorter path exists, remove the
+                        // old path from the shortestPaths map
                     }
                     SearchNode nextNode = new SearchNode(edge.successor, cost, currentNode);
-                    shortestPaths.put(successors, nextNode);
-                    pq.add(nextNode);
+
+                    //create a new SearchNode for the successor with the updated cost and predecessor
+
+                    shortestPaths.put(successors, nextNode); // add this updated path to the map
+
+                    pq.add(nextNode);  // add new SearchNode to the priority queue
                 }
             }
         }
