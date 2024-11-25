@@ -24,7 +24,6 @@ public class HashtableMap<KeyType, ValueType> implements MapADT{
 
     table = (LinkedList<Pair>[]) new LinkedList[capacity];
 
-    System.out.println("init with capacity: " + table.length);
   }
 
   @SuppressWarnings("unchecked")
