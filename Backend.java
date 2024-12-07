@@ -37,7 +37,7 @@ public class Backend implements BackendInterface {
                if (currentLine.isEmpty() || currentLine.startsWith("digraph") || currentLine.startsWith("}") || currentLine.startsWith("{")) {
                    continue;
                }
-               // call helper method to split the line into relavant parts
+               // call helper method to split the line into relevant parts
                String[] parts = parseLine(currentLine);
                // this regex gets rid of the quotes around the predecessor
                String pred = parts[0].trim().replace("\"", "");
@@ -55,7 +55,7 @@ public class Backend implements BackendInterface {
     }
 
     /**
-     * Private helper method to split lines from loaded file into relavant parts
+     * Private helper method to split lines from loaded file into relevant parts
      * @param line
      * @return the split line
      */
@@ -85,7 +85,15 @@ public class Backend implements BackendInterface {
      */
     @java.lang.Override
     public List<String> findLocationsOnShortestPath(String startLocation, String endLocation) {
-        List<String> shortestLocations = graph.shortestPathData(startLocation, endLocation);
+        // List for the shortest locations
+        List<String> shortestLocations = null;
+        try {
+            shortestLocations = graph.shortestPathData(startLocation, endLocation);
+        } catch (NoSuchElementException e) {
+            // return empty list if shortestPathData throws NoSuchElementException
+            return Collections.emptyList();
+        }
+
         // if the path is null, we just return an empty list.
         if (shortestLocations == null) {
             return Collections.emptyList();
@@ -112,7 +120,7 @@ public class Backend implements BackendInterface {
         if (shortestPath.isEmpty()) {
             return Collections.emptyList();
         }
-        // otherewise, we create a list of all of the edge weights by iterating over the nodes in the path.
+        // otherwise, we create a list of all the edge weights by iterating over the nodes in the path.
         List<Double> shortestPathTimes = new ArrayList<>();
         for (int i = 1; i < shortestPath.size(); i++) {
             shortestPathTimes.add(graph.getEdge(shortestPath.get(i - 1), shortestPath.get(i)));
@@ -142,7 +150,7 @@ public class Backend implements BackendInterface {
         int maxLength = 0;
         // list used to store the current longest path
         List<String> longestList = null;
-        // iterate over all of the locations to see what the end location is with the longest path from the starting location
+        // iterate over all the locations to see what the end location is with the longest path from the starting location
         for (String location : locations) {
             if ((findLocationsOnShortestPath(startLocation, location).size()) > maxLength) {
                 longestList = findLocationsOnShortestPath(startLocation, location);
@@ -150,7 +158,7 @@ public class Backend implements BackendInterface {
             }
         }
         // if there are no paths (no other node is reachable), we throw an exception
-        if (maxLength == 0 || longestList == null) {
+        if (maxLength == 0) {
             throw new NoSuchElementException("There are no reachable destinations from this starting node.");
         }
         return longestList;
