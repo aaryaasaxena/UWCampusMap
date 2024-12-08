@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 JUNITPATH="/libs/junit5.jar"
-JUNITFXPATH="/libs/junit5fx.jar"
-
+JUNITFXPATH="/libs/junit5.jar"
 if [[ -f ${JUNITPATH} ]]; then
     cp ${JUNITPATH} ../
 fi
