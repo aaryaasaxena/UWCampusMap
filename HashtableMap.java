@@ -125,7 +125,7 @@ public class HashtableMap<KeyType, ValueType> implements MapADT{
    * @throws NoSuchElementException when key is not stored in this collection
    */
   @Override
-  public Object get(Object key) throws NoSuchElementException {
+  public ValueType get(Object key) throws NoSuchElementException {
 
     for (LinkedList<Pair> pairs : table) {
       if (pairs != null) {
