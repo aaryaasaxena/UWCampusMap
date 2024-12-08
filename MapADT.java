@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -55,15 +54,8 @@ public interface MapADT<KeyType, ValueType> {
 
     /**
      * Retrieves this collection's capacity.
-     * @return the size of the underlying array for this collection
+     * @return the size of te underlying array for this collection
      */
     public int getCapacity();
 
-    /**
-     * Retrieves this collection's keys.
-     * @return a list of keys in the underlying array for this collection
-     */
-    public List<KeyType> getKeys();
-
 }
-
