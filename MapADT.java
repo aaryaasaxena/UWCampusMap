@@ -58,4 +58,6 @@ public interface MapADT<KeyType, ValueType> {
      */
     public int getCapacity();
 
+    public LinkedList<KeyType> getKeys();
+
 }

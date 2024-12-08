@@ -205,6 +205,21 @@ public class HashtableMap<KeyType, ValueType> implements MapADT{
     return table.length;
   }
 
+    public LinkedList<KeyType> getKeys() {
+    LinkedList<KeyType> keys = new LinkedList<>();
+
+    // iterate through each bucket in the hash table
+    for (LinkedList<Pair> bucket : table) {
+      if (bucket != null) { // only process non-null buckets
+        for (Pair pair : bucket) {
+          keys.add(pair.key); // add the key from each pair to the list
+        }
+      }
+    }
+
+    return keys; // return the list of keys
+  }
+
 
 
   @Test
