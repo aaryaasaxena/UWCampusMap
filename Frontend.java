@@ -25,25 +25,25 @@ public class Frontend implements FrontendInterface {
    * @return an HTML string that contains input controls that the user can make use of to request a
    * shortest path computation
    */
-  @Override
-  public String generateShortestPathPromptHTML() {
+@Override
+public String generateShortestPathPromptHTML() {
     return """
         <div>
-            <!-- label and input field for the start location -->
+            <!-- Label and input field for the start location -->
             <label for="start">Start Location:</label>
             <input type="text" id="start" name="start" placeholder="Enter Start Location" />
             <br/>
-            
-            <!-- label and input field for the destination -->
+
+            <!-- Label and input field for the destination -->
             <label for="end">Destination:</label>
             <input type="text" id="end" name="end" placeholder="Enter Destination" />
             <br/>
-            
-            <!-- button to trigger the shortest path computation -->
-            <button onclick="generateShortestPathResponseHTML()">Find Shortest Path</button>
+
+            <!-- Input button to trigger the shortest path computation -->
+            <input type="button" value="Find Shortest Path" onclick="generateShortestPathResponseHTML()" />
         </div>
         """;
-  }
+}
 
 
   /**
@@ -93,18 +93,20 @@ public class Frontend implements FrontendInterface {
    * @return an HTML string that contains input controls that the user can make use of to request a
    * longest location list calculation
    */
-  @Override
-  public String generateLongestLocationListFromPromptHTML() {
+@Override
+public String generateLongestLocationListFromPromptHTML() {
     return """
-        <br>
         <div>
+            <!-- Label and input field for the start location -->
             <label for="from">Start Location:</label>
             <input type="text" id="from" name="from" placeholder="Enter Start Location" />
             <br/>
-            <button onclick="generateLongestLocationListFromResponseHTML">Longest Location List From</button>
+
+            <!-- Input button to trigger the longest location list computation -->
+            <input type="button" value="Longest Location List From" onclick="generateLongestLocationListFromResponseHTML()" />
         </div>
         """;
-  }
+}
 
   /**
    * Returns an HTML fragment that can be embedded within the body of a larger html page.  This HTML

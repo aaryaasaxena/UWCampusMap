@@ -1,5 +1,5 @@
 import java.util.NoSuchElementException;
-import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -60,6 +60,6 @@ public interface MapADT<KeyType, ValueType> {
      */
     public int getCapacity();
 
-    public LinkedList<KeyType> getKeys();
+    public List<KeyType> getKeys();
 
 }

@@ -95,19 +95,26 @@ public class WebApp {
     }
 
     // reads key value pairs from the query string of a URI into a map
-    private static Map<String,String> parseQuery(String query) {
-				HashMap<String,String> map = new HashMap<>();
-				if(query != null && query.contains("="))
-						Stream.of(query.split("&")).forEach(arg -> {
-										String[] pair = arg.split("=");
-										if(pair.length != 2)
-												throw new IllegalArgumentException("Unable to split "+
-												    "arg: " + arg+" into a key value pair around a "+
-														"single = delimiter.");
-										map.put(pair[0],pair[1]);
-								});
-				return map;
+private static Map<String, String> parseQuery(String query) {
+    Map<String, String> map = new HashMap<>();
+    if (query == null || query.isEmpty()) {
+        return map; // Return empty map for null or empty query
     }
+
+    try {
+        String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
+        Stream.of(decodedQuery.split("&")).forEach(arg -> {
+            String[] pair = arg.split("=", 2); // Limit to 2 parts
+            String key = pair[0].trim();
+            String value = (pair.length > 1) ? pair[1].trim() : ""; // Default value is ""
+            map.put(key, value);
+        });
+    } catch (Exception e) {
+        System.err.println("Error parsing query: " + query);
+        e.printStackTrace();
+    }
+    return map;
+}
 
     // creates a working Frontend, Backend, DijkstraGraph, and HashtableMap
     private static FrontendInterface createWorkingFrontend(String filename) throws IOException {

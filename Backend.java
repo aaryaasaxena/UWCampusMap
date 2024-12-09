@@ -112,21 +112,29 @@ public class Backend implements BackendInterface {
      *         the shortest path from startLocation to endLocation, or an empty
      *         list if no such path exists
      */
-    @java.lang.Override
-    public List<Double> findTimesOnShortestPath(String startLocation, String endLocation) {
-        // first, get all the locations on the path
-        List<String> shortestPath = findLocationsOnShortestPath(startLocation, endLocation);
-        // if there is no path, then there are no edges, so we just return an empty List.
-        if (shortestPath.isEmpty()) {
-            return Collections.emptyList();
-        }
-        // otherwise, we create a list of all the edge weights by iterating over the nodes in the path.
-        List<Double> shortestPathTimes = new ArrayList<>();
-        for (int i = 1; i < shortestPath.size(); i++) {
-            shortestPathTimes.add(graph.getEdge(shortestPath.get(i - 1), shortestPath.get(i)));
-        }
-        return shortestPathTimes;
+	@Override
+public List<Double> findTimesOnShortestPath(String startLocation, String endLocation) {
+    // Get all locations on the shortest path
+    List<String> shortestPath = findLocationsOnShortestPath(startLocation, endLocation);
+    
+    // If the path is empty, no edges exist
+    if (shortestPath.isEmpty()) {
+        return Collections.emptyList();
     }
+
+    // If the path contains only one location (start == end), no travel time is required
+    if (shortestPath.size() == 1) {
+        return Collections.singletonList(0.0); // or simply return an empty list if no edge traversal is needed
+    }
+
+    // Otherwise, calculate the edge weights for the shortest path
+    List<Double> shortestPathTimes = new ArrayList<>();
+    for (int i = 1; i < shortestPath.size(); i++) {
+        shortestPathTimes.add(graph.getEdge(shortestPath.get(i - 1), shortestPath.get(i)));
+    }
+
+    return shortestPathTimes;
+}
 
     /**
      * Returns the longest list of locations along any shortest path that starts
