@@ -3,7 +3,7 @@ SRC_DIR = .
 TEST_DIR = $(SRC_DIR)
 JUNIT_JAR = ../junit5.jar
 
-# Specify the individual classes to compile
+# Specify the individual classes to compile (including test files)
 CLASSES = Frontend.java Backend.java DijkstraGraph.java HashtableMap.java
 CLASS_FILES = $(CLASSES:.java=.class)
 
@@ -20,6 +20,7 @@ runTests: $(CLASS_FILES)
 clean:
 	rm -f $(CLASS_FILES)
 
-# Compile specific Java files
+# Compile specific Java files, including the JUnit test files
 %.class: %.java
-	javac -cp $(SRC_DIR) $<
+	javac -cp $(SRC_DIR):$(JUNIT_JAR) $<  # Add JUnit JAR to the classpath during compilation
+
