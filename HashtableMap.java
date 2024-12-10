@@ -154,7 +154,7 @@ public class HashtableMap<KeyType, ValueType> implements MapADT{
 
     Object value = get(key);
 
-    int index = key.hashCode() % this.getCapacity();
+    int index = Math.abs(key.hashCode() % this.getCapacity());
 
     LinkedList<Pair> pairs = table[index];
     if (pairs != null){
