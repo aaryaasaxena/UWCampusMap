@@ -83,24 +83,29 @@ public class Backend implements BackendInterface {
      * @param endLocation the end location of the path
      * @return a list of nodes along the shortest path, or an empty list if no path exists
      */
-    @java.lang.Override
-    public List<String> findLocationsOnShortestPath(String startLocation, String endLocation) {
-        // List for the shortest locations
-        List<String> shortestLocations = null;
-        try {
-            shortestLocations = graph.shortestPathData(startLocation, endLocation);
-        } catch (NoSuchElementException e) {
-            // return empty list if shortestPathData throws NoSuchElementException
-            return Collections.emptyList();
-        }
-
-        // if the path is null, we just return an empty list.
-        if (shortestLocations == null) {
-            return Collections.emptyList();
-        }
-        // otherwise, we just return the list given by the shortestPathData method
-        return shortestLocations;
+	@Override
+public List<String> findLocationsOnShortestPath(String startLocation, String endLocation) {
+    // List for the shortest locations
+    List<String> shortestLocations = null;
+    try {
+        shortestLocations = graph.shortestPathData(startLocation, endLocation);
+    } catch (NoSuchElementException e) {
+        // Return an empty list if shortestPathData throws NoSuchElementException
+        return Collections.emptyList();
     }
+
+    // If the path is null or empty, return an empty list
+    if (shortestLocations == null || shortestLocations.isEmpty()) {
+        return Collections.emptyList();
+    }
+
+    // Remove the startLocation if it's at the beginning of the list
+    if (shortestLocations.get(0).equals(startLocation)) {
+        shortestLocations.remove(0); // Remove the first element if it's the startLocation
+    }
+
+    return shortestLocations;
+}
 
     /**
      * Return the walking times in seconds between each two nodes on the
@@ -116,21 +121,29 @@ public class Backend implements BackendInterface {
 public List<Double> findTimesOnShortestPath(String startLocation, String endLocation) {
     // Get all locations on the shortest path
     List<String> shortestPath = findLocationsOnShortestPath(startLocation, endLocation);
-    
+
     // If the path is empty, no edges exist
     if (shortestPath.isEmpty()) {
         return Collections.emptyList();
     }
 
     // If the path contains only one location (start == end), no travel time is required
-    if (shortestPath.size() == 1) {
-        return Collections.singletonList(0.0); // or simply return an empty list if no edge traversal is needed
+    if (shortestPath.size() == 1 && startLocation.equals(endLocation)) {
+        return Collections.singletonList(0.0); // No travel time for self-to-self
     }
 
     // Otherwise, calculate the edge weights for the shortest path
     List<Double> shortestPathTimes = new ArrayList<>();
     for (int i = 1; i < shortestPath.size(); i++) {
-        shortestPathTimes.add(graph.getEdge(shortestPath.get(i - 1), shortestPath.get(i)));
+        String from = shortestPath.get(i - 1);
+        String to = shortestPath.get(i);
+
+        // Check if from and to are the same (self-loop), handle appropriately
+        if (from.equals(to)) {
+            shortestPathTimes.add(0.0);  // If it's a self-loop, the travel time is 0
+        } else {
+            shortestPathTimes.add(graph.getEdge(from, to));  // Regular edge
+        }
     }
 
     return shortestPathTimes;
