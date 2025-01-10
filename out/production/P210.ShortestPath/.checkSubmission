@@ -1,21 +1,45 @@
 #!/usr/bin/env bash
 
 JUNITPATH="/libs/junit5.jar"
+JUNITFXPATH="/libs/junit5.jar"
 
 if [[ -f ${JUNITPATH} ]]; then
     cp ${JUNITPATH} ../
 fi
 
-if ! javac -encoding "UTF-8" -cp ../junit5.jar:. *.java; then
+if [[ -f ${JUNITFXPATH} ]]; then
+    cp ${JUNITFXPATH} ../
+fi
+
+if [[ -d /javafx  ]]; then
+    cp -r /javafx ../javafx
+fi
+
+if [[ ! -f Makefile ]]; then
 	echo
-	echo "Submission Failed Check: cannot compile all java files in submission"
+	echo "Submission Failed Check: no Makefile found"
 	exit 1
 fi
 
-if ! java -jar ../junit5.jar --class-path=. --select-class=P210SubmissionChecker; then
+if ! make runTests; then
 	echo
-	echo "Submission Failed Check: one or more JUnit tests failed; if you have submitted (pushed) 3 or more JUnit test methods then your submission is complete for the mid-week deadline"
+	echo "Submission Failed Check: \"make runTests\" does not succeed or some tests do not pass"
 	exit 1
+fi
+
+if grep -q "BackendPlaceholder" App.java; then
+    echo "Submission Failed Check: App.java uses BackendPlaceholder, but should not"
+    exit 1
+fi
+
+if grep -q "FrontendPlaceholder" App.java; then
+    echo "Submission Failed Check: App.java uses FrontendPlaceholder, but should not"
+    exit 1
+fi
+
+if grep -q "GraphPlaceholder" App.java; then
+    echo "Submission Failed Check: App.java uses GraphPlaceholder, but should not"
+    exit 1
 fi
 
 echo

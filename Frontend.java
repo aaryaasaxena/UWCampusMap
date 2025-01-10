@@ -162,7 +162,7 @@ public String generateLongestLocationListFromPromptHTML() {
       // Handle the case where getLongestLocationListFrom throws NoSuchElementException
       return """
           <div>
-              <p>Error: No such element found for the start location """ + start + ".</p>" + """
+              <p>Error: No such element found for the start location """ + " " + start + ".</p>" + """
           </div>
           """;
     }
