@@ -1,2 +1,7 @@
 *.class
 *.jar
+*.txt
+.checkSubmission
+P210SubmissionChecker.java
+P212SubmissionChecker.java
+.idea
